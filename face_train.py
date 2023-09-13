@@ -6,7 +6,8 @@ from PIL import Image
 
 class FaceTrainer(object):
     # получаем картинки и подписи из датасета
-    def get_images_and_labels(self, datapath):
+    @staticmethod
+    def get_images_and_labels(datapath: str, enable_window: bool, window_time: int):
         # указываем, что мы будем искать лица по примитивам Хаара
         faceCascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
         # путь к датасету с фотографиями пользователей
@@ -31,27 +32,29 @@ class FaceTrainer(object):
                 images.append(image[y: y + h, x: x + w])
                 # добавляем id пользователя в список подписей
                 labels.append(nbr)
-                # выводим текущую картинку на экран
-                cv2.imshow("Adding faces to traning set...", image[y: y + h, x: x + w])
-                # делаем паузу
-                cv2.waitKey(100)
+                if enable_window:
+                    # выводим текущую картинку на экран
+                    cv2.imshow("Adding faces to traning set...", image[y: y + h, x: x + w])
+                    # делаем паузу
+                    cv2.waitKey(window_time)
         # возвращаем список картинок и подписей
         return images, labels
 
-
-    def start_training(self):
+    def start_training(self, show_window: bool, frame_time: int):
         recognizer = cv2.face.LBPHFaceRecognizer_create()
         path = os.path.dirname(os.path.abspath(__file__))
         dataPath = path + r'/dataSet'
 
-        images, labels = self.get_images_and_labels(dataPath)
+        images, labels = self.get_images_and_labels(dataPath, show_window, frame_time)
         # обучаем модель распознавания на наших картинках и учим сопоставлять её лица и подписи к ним
         recognizer.train(images, np.array(labels))
         # сохраняем модель
         recognizer.save(path + r'/trainer/trainer.yml')
         # удаляем из памяти все созданные окна
         cv2.destroyAllWindows()
+        return
 
 
-Obj = FaceTrainer()
-Obj.start_training()
+if __name__ == '__main__':
+    Obj = FaceTrainer()
+    Obj.start_training()
