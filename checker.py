@@ -1,4 +1,5 @@
 import cv2
+from work_with_db import DbWorker
 
 
 class Checker(object):
@@ -10,7 +11,11 @@ class Checker(object):
         # Тип шрифта
         font = cv2.FONT_HERSHEY_SIMPLEX
         # Список имен для id
-        names = ['None', 'Misha', "Katya", 'Egor']
+        names = ['None']
+        obj = DbWorker()
+        response = obj.get_all_users()
+        for i in response:
+            names.append(i[1])
 
         cam = cv2.VideoCapture(0)
         cam.set(3, 640)  # set video width
