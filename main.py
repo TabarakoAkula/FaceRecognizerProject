@@ -83,7 +83,6 @@ def db_asker():
         '4 Delete User\n'
         '5 Edit user\n'
         "6 Get number of id's\n"
-        "7 Create db\n"
         "8 Clear db\n"
         '10 exit')
     answer = int(input('Choose option number: '))
@@ -126,13 +125,17 @@ def db_asker():
             else:
                 print('Hmmm okeey :/')
         case 6:
-            print("Number of id's in db:", obj.get_number_of_users())
-        case 7:
-            db_name = input('Enter name for db: ')
-            obj.create_db(db_name)
+            print("\nNumber of id's in db:", obj.get_number_of_users())
         case 8:
             db_name = input('Enter name of db: ')
-            obj.clear_db(db_name)
+            if input('ARE U SURE? Y/N: ').lower() == 'y':
+                if input('YOU WANT TO CLEAR DB, YES? Y/N: ').lower() == 'y':
+                    obj.clear_db(db_name)
+                    print('BYE-BYE DB')
+                else:
+                    print('\nBe careful!')
+            else:
+                print('\nBe careful!')
         case 10:
             base_asker()
     db_asker()

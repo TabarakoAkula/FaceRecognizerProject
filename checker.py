@@ -11,11 +11,9 @@ class Checker(object):
         # Тип шрифта
         font = cv2.FONT_HERSHEY_SIMPLEX
         # Список имен для id
-        names = ['None']
         obj = DbWorker()
-        response = obj.get_all_users()
-        for i in response:
-            names.append(i[1])
+        names = obj.get_all_users(names=True)
+        names.insert(0, 'None')
 
         cam = cv2.VideoCapture(0)
         cam.set(3, 640)  # set video width

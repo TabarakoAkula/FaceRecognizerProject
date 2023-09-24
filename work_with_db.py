@@ -25,8 +25,11 @@ class DbWorker(object):
         )
         self.cursor = self.connection.cursor()
 
-    def get_all_users(self):
-        return self.returner("""SELECT * FROM users""")
+    def get_all_users(self, names=False):
+        if not names:
+            return self.returner("""SELECT * FROM users""")
+        else:
+            return self.returner("""SELECT name FROM users""")
 
     def get_number_of_users(self):
         return len(self.returner('SELECT id FROM users'))
@@ -59,16 +62,8 @@ class DbWorker(object):
         return self.returner(f'''UPDATE users SET name = ' ', profile_photo_address = ' ' WHERE id = {user_id}''',
                              full_fetching=False, commit=True)
 
-    def create_db(self, name_db):
-        return self.returner(f'''CREATE TABLE {name_db}
-                                  (ID INT PRIMARY KEY     NOT NULL,
-                                  NAME           TEXT    NOT NULL,
-                                  profile_photo_address         TEXT NOT NULL); ''', commit=True, full_fetching=False)
-
     def clear_db(self, name_db: str):
-        number = self.get_number_of_users()
-        for i in range(number):
-            self.returner(f"DELETE FROM {name_db} WHERE id = '{i + 1}'", full_fetching=False, commit=True)
+        self.returner(f'TRUNCATE {name_db}', full_fetching=False, commit=True)
         return
 
     def returner(self, execution_line, full_fetching=True, commit=False):

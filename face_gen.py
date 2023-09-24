@@ -1,9 +1,14 @@
 import cv2
+import os
 
 
 class FaceGen(object):
     @staticmethod
     def create_or_update_person_dataset(person_id: str, number_of_photos_required: int, *window_setting) -> None:
+        is_directory_avaliable = os.path.isdir('dataSet/' + str(person_id))
+        if not is_directory_avaliable:
+            os.mkdir('dataSet/' + str(person_id))
+
         enable_window, window_time = window_setting
         # указываем, что мы будем искать лица по примитивам Хаара
         detector = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
@@ -26,7 +31,7 @@ class FaceGen(object):
                 # увеличиваем счётчик кадров
                 number_of_photos_made = number_of_photos_made + 1
                 # записываем файл на диск
-                cv2.imwrite("dataSet/face-" + person_id + '.' + str(number_of_photos_made) + ".jpg",
+                cv2.imwrite("dataSet/" + person_id + "/face-" + person_id + '.' + str(number_of_photos_made) + ".jpg",
                             gray[y_coord - offset:y_coord + high + offset, x_coord - offset:x_coord + width + offset])
                 # формируем размеры окна для вывода лица
                 cv2.rectangle(im, (x_coord - 50, y_coord - 50), (x_coord + width + 50, y_coord + high + 50),
@@ -37,7 +42,7 @@ class FaceGen(object):
                 # делаем паузу
                 cv2.waitKey(window_time)
             # если у нас хватает кадров
-            if number_of_photos_made > number_of_photos_required:
+            if number_of_photos_made >= number_of_photos_required:
                 # освобождаем камеру
                 video.release()
                 # удалаяем все созданные окна

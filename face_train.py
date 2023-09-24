@@ -12,7 +12,11 @@ class FaceTrainer(object):
         faceCascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
         # путь к датасету с фотографиями пользователей
         # получаем путь к картинкам
-        image_paths = [os.path.join(datapath, f) for f in os.listdir(datapath)]
+        image_path1 = [os.path.join(datapath, f) for f in os.listdir(datapath)]
+        image_paths = []
+        for i in image_path1:
+            for j in os.listdir(i):
+                image_paths.append(os.path.join(datapath, i, j))
         # списки картинок и подписей на старте пустые
         images = []
         labels = []
@@ -57,4 +61,4 @@ class FaceTrainer(object):
 
 if __name__ == '__main__':
     Obj = FaceTrainer()
-    Obj.start_training()
+    Obj.start_training(True, 1)
