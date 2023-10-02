@@ -3,7 +3,7 @@ from os import getenv
 
 load_dotenv(find_dotenv())
 
-host = getenv('HOST')
-db_name = getenv('DB_NAME')
-password = getenv('PASSWORD')
-user = getenv('USER')
+host = getenv("HOST")
+db_name = getenv("DB_NAME")
+password = getenv("PASSWORD")
+user = getenv("USER")
