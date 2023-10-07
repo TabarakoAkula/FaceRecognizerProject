@@ -1,4 +1,7 @@
+import shutil
+
 import psycopg2
+
 from config import host, password, db_name, user
 
 
@@ -64,11 +67,19 @@ class DbWorker(object):
     # Мы не удаляем запись, а делаем пустой, т.к. индексация фото идёт по id,
     # и если смещать все id при удалении, то надо будет переименовывать все файлы фото.
     def delete_user(self, user_id: int):
+        self.delete_user_photos(user_id)
         return self.returner(
-            f"""UPDATE users SET name = ' ', profile_photo_address = ' ' WHERE id = {user_id}""",
+            f"""UPDATE users SET name = ' ',
+             profile_photo_address = ' ' WHERE id = {user_id}""",
             full_fetching=False,
             commit=True,
         )
+
+    @staticmethod
+    def delete_user_photos(user_id: int) -> None:
+        path_for_del = f"dataSet/{user_id}"
+        shutil.rmtree(path_for_del)
+        return
 
     def clear_db(self, name_db: str):
         self.returner(f"TRUNCATE {name_db}", full_fetching=False, commit=True)

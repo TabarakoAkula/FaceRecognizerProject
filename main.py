@@ -38,8 +38,10 @@ def get_new_photos():
 
 
 def base_asker():
-    print("\nChoose Option:\n" "1 Work with model\n" "2 Work with db\n" "3 exit")
-    answer = ''
+    print(
+        "\nChoose Option:\n" "1 Work with model\n" "2 Work with db\n" "3 exit"
+    )
+    answer = ""
     try:
         answer = int(input("Choose option number: "))
     except ValueError:
@@ -57,8 +59,10 @@ def base_asker():
 
 
 def model_asker():
-    print("\n1 Get New Photos\n" "2 Train Photos\n" "3 Start Checker\n" "4 exit")
-    answer = ''
+    print(
+        "\n1 Get New Photos\n" "2 Train Photos\n" "3 Start Checker\n" "4 exit"
+    )
+    answer = ""
     try:
         answer = int(input("Choose option number: "))
     except ValueError:
@@ -72,7 +76,9 @@ def model_asker():
             show_window, frame_time = True, 1
             additional = True if input("Additional? y/n: ") == "y" else False
             if additional:
-                show_window = True if input("Show window? y/n: ") == "y" else False
+                show_window = (
+                    True if input("Show window? y/n: ") == "y" else False
+                )
                 frame_time = int(input("Enter pause between frames: "))
             print("Start training")
             FaceTrainer().start_training(show_window, frame_time)
@@ -82,19 +88,42 @@ def model_asker():
             print("Press ESC to exit")
 
             confidence_dictionary_clear = Checker().checker()
-            print(f'Clear Confidence Dictionary: {confidence_dictionary_clear}\n')
+            print(
+                f"Clear Confidence Dictionary: {confidence_dictionary_clear}\n"
+            )
 
-            confidence_dictionary_without_random_values = {i: confidence_dictionary_clear[i] for i in confidence_dictionary_clear if len(confidence_dictionary_clear[i]) >= 3}
-            print(f'Without random values: {confidence_dictionary_without_random_values}\n')
+            confidence_dictionary_without_random_values = {
+                i: confidence_dictionary_clear[i]
+                for i in confidence_dictionary_clear
+                if len(confidence_dictionary_clear[i]) >= 3
+            }
+            print(
+                f"Without random values: {confidence_dictionary_without_random_values}\n"
+            )
 
-            confidence_dictionary_without_edge_values = {i: confidence_dictionary_without_random_values[i][1:-1] for i in confidence_dictionary_without_random_values}
-            print(f'Without edge values: {confidence_dictionary_without_edge_values}\n')
+            confidence_dictionary_without_edge_values = {
+                i: confidence_dictionary_without_random_values[i][1:-1]
+                for i in confidence_dictionary_without_random_values
+            }
+            print(
+                f"Without edge values: {confidence_dictionary_without_edge_values}\n"
+            )
 
-            confidence_dictionary_with_max_values = {i: round(mean(confidence_dictionary_without_edge_values[i]), 1) for i in confidence_dictionary_without_edge_values}
-            print(f'With Max Values: {confidence_dictionary_with_max_values}\n')
+            confidence_dictionary_with_max_values = {
+                i: round(mean(confidence_dictionary_without_edge_values[i]), 1)
+                for i in confidence_dictionary_without_edge_values
+            }
+            print(
+                f"With Max Values: {confidence_dictionary_with_max_values}\n"
+            )
 
-            maximum_match = (max(confidence_dictionary_with_max_values.items(), key=lambda x: x[1]))
-            print(f'Maximum match: {maximum_match}\nPredicted user: {maximum_match[0]}\nWith confidence: {maximum_match[1]}')
+            maximum_match = max(
+                confidence_dictionary_with_max_values.items(),
+                key=lambda x: x[1],
+            )
+            print(
+                f"Maximum match: {maximum_match}\nPredicted user: {maximum_match[0]}\nWith confidence: {maximum_match[1]}"
+            )
         case 4:
             base_asker()
     model_asker()
@@ -111,7 +140,7 @@ def db_asker():
         "8 Clear db\n"
         "10 exit"
     )
-    answer = ''
+    answer = ""
     try:
         answer = int(input("Choose option number: "))
     except ValueError:
@@ -122,14 +151,24 @@ def db_asker():
         case 1:
             print("\n")
             response = obj.get_all_users()
-            strip_string = "+" + "-" * 10 + "+" + "-" * 34 + "+" + "-" * 75 + "+"
+            strip_string = (
+                "+" + "-" * 10 + "+" + "-" * 34 + "+" + "-" * 75 + "+"
+            )
             headers = (
-                "|   ID" + " " * 5 + "|  NAME" + 28 * " " + "|  PATH" + 69 * " " + "|"
+                "|   ID"
+                + " " * 5
+                + "|  NAME"
+                + 28 * " "
+                + "|  PATH"
+                + 69 * " "
+                + "|"
             )
             print(strip_string + "\n" + headers + "\n" + strip_string)
             # знак +, два пробела минимум, id, два пробела минимум, знак +, тогда у нас 10-4=6 символов на id
             for i in response:
-                id_string = "|   " + str(i[0]) + " " * (7 - len(str(i[0]))) + "|"
+                id_string = (
+                    "|   " + str(i[0]) + " " * (7 - len(str(i[0]))) + "|"
+                )
                 name_string = str(i[1]) + " " * (33 - len(str(i[1]))) + "|"
                 path_string = " " + i[2] + " " * (73 - len(i[2])) + "|"
                 print(id_string, name_string, path_string, "\n" + strip_string)

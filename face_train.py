@@ -7,7 +7,9 @@ from PIL import Image
 class FaceTrainer(object):
     # получаем картинки и подписи из датасета
     @staticmethod
-    def get_images_and_labels(datapath: str, enable_window: bool, window_time: int):
+    def get_images_and_labels(
+        datapath: str, enable_window: bool, window_time: int
+    ):
         # указываем, что мы будем искать лица по примитивам Хаара
         face_cascade = cv2.CascadeClassifier(
             cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
@@ -29,7 +31,9 @@ class FaceTrainer(object):
             # переводим картинку в numpy-массив
             image = np.array(image_pil, "uint8")
             # получаем id пользователя из имени файла
-            nbr = int(os.path.split(image_path)[1].split(".")[0].replace("face-", ""))
+            nbr = int(
+                os.path.split(image_path)[1].split(".")[0].replace("face-", "")
+            )
             # определяем лицо на картинке
             faces = face_cascade.detectMultiScale(image)
             # если лицо найдено
@@ -41,7 +45,8 @@ class FaceTrainer(object):
                 if enable_window:
                     # выводим текущую картинку на экран
                     cv2.imshow(
-                        "Adding faces to traning set...", image[y : y + h, x : x + w]
+                        "Adding faces to traning set...",
+                        image[y : y + h, x : x + w],
                     )
                     # делаем паузу
                     cv2.waitKey(window_time)
@@ -53,7 +58,9 @@ class FaceTrainer(object):
         path = os.path.dirname(os.path.abspath(__file__))
         data_path = path + r"/dataSet"
 
-        images, labels = self.get_images_and_labels(data_path, show_window, frame_time)
+        images, labels = self.get_images_and_labels(
+            data_path, show_window, frame_time
+        )
         # обучаем модель распознавания на наших картинках и учим сопоставлять её лица и подписи к ним
         recognizer.train(images, np.array(labels))
         # сохраняем модель

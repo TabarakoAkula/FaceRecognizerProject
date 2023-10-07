@@ -28,7 +28,7 @@ class Checker(object):
         ret, img = cam.read()
         start = time.time()
 
-        print('\nSTART of RECORDING\n')
+        print("\nSTART of RECORDING\n")
 
         while time.time() < start + 5:
             ret, img = cam.read()
@@ -43,23 +43,53 @@ class Checker(object):
 
             for x, y, w, h in faces:
                 cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
-                prediction_id, prediction_confidence = recognizer.predict(gray[y : y + h, x : x + w])
+                prediction_id, prediction_confidence = recognizer.predict(
+                    gray[y : y + h, x : x + w]
+                )
 
                 # Проверяем, что лицо распознано
                 if prediction_confidence < 100:
                     username_by_id = names[prediction_id]
-                    self.confidence_dictionary[names[prediction_id][0]].append(round(100 - prediction_confidence))
-                    prediction_confidence = "  {0}%".format(round(100 - prediction_confidence))
-                    print("Name:", names[prediction_id][0], "Conf:", prediction_confidence, end="\r")
+                    self.confidence_dictionary[names[prediction_id][0]].append(
+                        round(100 - prediction_confidence)
+                    )
+                    prediction_confidence = "  {0}%".format(
+                        round(100 - prediction_confidence)
+                    )
+                    print(
+                        "Name:",
+                        names[prediction_id][0],
+                        "Conf:",
+                        prediction_confidence,
+                        end="\r",
+                    )
                 else:
                     username_by_id = "Unknown"
-                    self.confidence_dictionary['Unknown'].append(round(100 - prediction_confidence))
-                    prediction_confidence = "  {0}%".format(round(100 - prediction_confidence))
+                    self.confidence_dictionary["Unknown"].append(
+                        round(100 - prediction_confidence)
+                    )
+                    prediction_confidence = "  {0}%".format(
+                        round(100 - prediction_confidence)
+                    )
                     print("Unknown", end="\r")
 
-                cv2.putText(img, str(username_by_id), (x + 5, y - 5), font, 1, (255, 255, 255), 2)
                 cv2.putText(
-                    img, str(prediction_confidence), (x + 5, y + h - 5), font, 1, (255, 255, 0), 1
+                    img,
+                    str(username_by_id),
+                    (x + 5, y - 5),
+                    font,
+                    1,
+                    (255, 255, 255),
+                    2,
+                )
+                cv2.putText(
+                    img,
+                    str(prediction_confidence),
+                    (x + 5, y + h - 5),
+                    font,
+                    1,
+                    (255, 255, 0),
+                    1,
                 )
 
             cv2.imshow("camera", img)
@@ -68,7 +98,7 @@ class Checker(object):
             if k == 27:
                 break
 
-        print('\n\nEND of RECORDING\n')
+        print("\n\nEND of RECORDING\n")
 
         cam.release()
         cv2.destroyAllWindows()

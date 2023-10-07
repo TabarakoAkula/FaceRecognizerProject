@@ -81,4 +81,6 @@ class FaceGen(object):
 
 if __name__ == "__main__":
     Obj = FaceGen()
-    Obj.create_or_update_person_dataset(input("Enter person id: "), 20, True, 1)
+    Obj.create_or_update_person_dataset(
+        input("Enter person id: "), 20, True, 1
+    )
