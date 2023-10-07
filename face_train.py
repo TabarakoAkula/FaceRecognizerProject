@@ -1,75 +1,59 @@
-import cv2
 import os
-import numpy as np
+
 from PIL import Image
+
+import cv2
+
+import numpy as np
 
 
 class FaceTrainer(object):
-    # получаем картинки и подписи из датасета
     @staticmethod
-    def get_images_and_labels(
-        datapath: str, enable_window: bool, window_time: int
-    ):
-        # указываем, что мы будем искать лица по примитивам Хаара
+    def get_images_and_labels(datapath: str,
+                              enable_window: bool,
+                              window_time: int):
         face_cascade = cv2.CascadeClassifier(
-            cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
+            cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
         )
-        # путь к датасету с фотографиями пользователей
-        # получаем путь к картинкам
-        image_path1 = [os.path.join(datapath, f) for f in os.listdir(datapath)]
+        image_path1 = [os.path.join(datapath, f)
+                       for f in os.listdir(datapath)]
         image_paths = []
         for i in image_path1:
             for j in os.listdir(i):
                 image_paths.append(os.path.join(datapath, i, j))
-        # списки картинок и подписей на старте пустые
         images = []
         labels = []
-        # перебираем все картинки в датасете
         for image_path in image_paths:
-            # читаем картинку и сразу переводим в ч/б
-            image_pil = Image.open(image_path).convert("L")
-            # переводим картинку в numpy-массив
-            image = np.array(image_pil, "uint8")
-            # получаем id пользователя из имени файла
-            nbr = int(
-                os.path.split(image_path)[1].split(".")[0].replace("face-", "")
-            )
-            # определяем лицо на картинке
+            image_pil = Image.open(image_path).convert('L')
+            image = np.array(image_pil, 'uint8')
+            nbr = int(os.path.split(image_path)[1].split('.')
+                      [0].replace('face-', ''))
             faces = face_cascade.detectMultiScale(image)
-            # если лицо найдено
             for x, y, w, h in faces:
-                # добавляем его к списку картинок
-                images.append(image[y : y + h, x : x + w])
-                # добавляем id пользователя в список подписей
+                images.append(image[y: y + h, x: x + w])
                 labels.append(nbr)
                 if enable_window:
-                    # выводим текущую картинку на экран
                     cv2.imshow(
-                        "Adding faces to traning set...",
-                        image[y : y + h, x : x + w],
+                        'Adding faces to traning set...',
+                        image[y: y + h, x: x + w],
                     )
-                    # делаем паузу
                     cv2.waitKey(window_time)
-        # возвращаем список картинок и подписей
         return images, labels
 
     def start_training(self, show_window: bool, frame_time: int):
         recognizer = cv2.face.LBPHFaceRecognizer_create()
         path = os.path.dirname(os.path.abspath(__file__))
-        data_path = path + r"/dataSet"
+        data_path = path + r'/dataSet'
 
-        images, labels = self.get_images_and_labels(
-            data_path, show_window, frame_time
-        )
-        # обучаем модель распознавания на наших картинках и учим сопоставлять её лица и подписи к ним
+        images, labels = self.get_images_and_labels(data_path,
+                                                    show_window,
+                                                    frame_time)
         recognizer.train(images, np.array(labels))
-        # сохраняем модель
-        recognizer.save(path + r"/trainer/trainer.yml")
-        # удаляем из памяти все созданные окна
+        recognizer.save(path + r'/trainer/trainer.yml')
         cv2.destroyAllWindows()
         return
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     Obj = FaceTrainer()
     Obj.start_training(True, 1)
