@@ -1,4 +1,6 @@
 import logging
+from statistics import mean
+
 from face_gen import FaceGen
 from face_train import FaceTrainer
 from checker import Checker
@@ -78,7 +80,21 @@ def model_asker():
         case 3:
             print("Start checker")
             print("Press ESC to exit")
-            Checker().checker()
+
+            confidence_dictionary_clear = Checker().checker()
+            print(f'Clear Confidence Dictionary: {confidence_dictionary_clear}\n')
+
+            confidence_dictionary_without_random_values = {i: confidence_dictionary_clear[i] for i in confidence_dictionary_clear if len(confidence_dictionary_clear[i]) >= 3}
+            print(f'Without random values: {confidence_dictionary_without_random_values}\n')
+
+            confidence_dictionary_without_edge_values = {i: confidence_dictionary_without_random_values[i][1:-1] for i in confidence_dictionary_without_random_values}
+            print(f'Without edge values: {confidence_dictionary_without_edge_values}\n')
+
+            confidence_dictionary_with_max_values = {i: round(mean(confidence_dictionary_without_edge_values[i]), 1) for i in confidence_dictionary_without_edge_values}
+            print(f'With Max Values: {confidence_dictionary_with_max_values}\n')
+
+            maximum_match = (max(confidence_dictionary_with_max_values.items(), key=lambda x: x[1]))
+            print(f'Maximum match: {maximum_match}\nPredicted user: {maximum_match[0]}\nWith confidence: {maximum_match[1]}')
         case 4:
             base_asker()
     model_asker()
