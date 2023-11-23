@@ -4,9 +4,13 @@
 
 ### BD - PostgreSQL 16.0
 ---
+## Клонирование проекта
+```bash
+git clone https://github.com/TabarakoAkula/FaceRecognizerProject
+```
 ## Обновление pip:  
 + Windows:
-```cmd
+```bash
 python -m pip install -U pip 
 ```
 
@@ -33,12 +37,12 @@ source venv/bin/activate
 ---
 
 ## Установка зависимостей
-+ Stable:
++ Для работы приложения:
 ```bash
 pip install -r requirements/prod.txt
 ```
-
-+ Test: 
+Дополнительно:
++ Для дебага ошибок: 
 ```bash
 pip install -r requirements/test.txt
 ```
@@ -89,12 +93,7 @@ CREATE TABLE users
 ---
 
 ## Настройка .env файла:  
-Создайте файл .env в корневой папке проекта  
-В данный файл запишите параметры, которые указывали при создании базы данных, а именно: 
-+ HOST
-+ USER
-+ PASSWORD
-+ DB_NAME
+Заполните данные в файле ``.env.template`` и после переименуйте файл в ``.env``
 
 ---
 
