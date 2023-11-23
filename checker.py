@@ -1,8 +1,10 @@
 import time
 
 import cv2
-
 from work_with_db import DbWorker
+
+
+__all__ = ()
 
 
 class Checker(object):
@@ -11,16 +13,16 @@ class Checker(object):
 
     def checker(self) -> dict:
         recognizer = cv2.face.LBPHFaceRecognizer_create()
-        recognizer.read('trainer/trainer.yml')
+        recognizer.read("trainer/trainer.yml")
         face_cascade = cv2.CascadeClassifier(
-            cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
+            cv2.data.haarcascades + "haarcascade_frontalface_default.xml",
         )
         # Тип шрифта
         font = cv2.FONT_HERSHEY_SIMPLEX
         # Список имен для id
         obj = DbWorker()
         names = obj.get_all_users(names=True)
-        names.insert(0, ('Unknown',))
+        names.insert(0, ("Unknown",))
         for i in names:
             self.confidence_dictionary[i[0]] = []
 
@@ -30,7 +32,7 @@ class Checker(object):
         ret, img = cam.read()
         start = time.time()
 
-        print('\nSTART of RECORDING\n')
+        print("\nSTART of RECORDING\n")
 
         while time.time() < start + 5:
             ret, img = cam.read()
@@ -46,34 +48,34 @@ class Checker(object):
             for x, y, w, h in faces:
                 cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
                 prediction_id, prediction_confidence = recognizer.predict(
-                    gray[y: y + h, x: x + w]
+                    gray[y : y + h, x : x + w],
                 )
 
                 # Проверяем, что лицо распознано
                 if prediction_confidence < 100:
                     username_by_id = names[prediction_id]
                     self.confidence_dictionary[names[prediction_id][0]].append(
-                        round(100 - prediction_confidence)
+                        round(100 - prediction_confidence),
                     )
-                    prediction_confidence = '  {0}%'.format(
-                        round(100 - prediction_confidence)
+                    prediction_confidence = "  {0}%".format(
+                        round(100 - prediction_confidence),
                     )
                     print(
-                        'Name:',
+                        "Name:",
                         names[prediction_id][0],
-                        'Conf:',
+                        "Conf:",
                         prediction_confidence,
-                        end='\r',
+                        end="\r",
                     )
                 else:
-                    username_by_id = 'Unknown'
-                    self.confidence_dictionary['Unknown'].append(
-                        round(100 - prediction_confidence)
+                    username_by_id = "Unknown"
+                    self.confidence_dictionary["Unknown"].append(
+                        round(100 - prediction_confidence),
                     )
-                    prediction_confidence = '  {0}%'.format(
-                        round(100 - prediction_confidence)
+                    prediction_confidence = "  {0}%".format(
+                        round(100 - prediction_confidence),
                     )
-                    print('Unknown', end='\r')
+                    print("Unknown", end="\r")
 
                 cv2.putText(
                     img,
@@ -94,19 +96,19 @@ class Checker(object):
                     1,
                 )
 
-            cv2.imshow('camera', img)
+            cv2.imshow("camera", img)
 
             k = cv2.waitKey(10) & 0xFF  # 'ESC' для Выхода
             if k == 27:
                 break
 
-        print('\n\nEND of RECORDING\n')
+        print("\n\nEND of RECORDING\n")
 
         cam.release()
         cv2.destroyAllWindows()
         return self.confidence_dictionary
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     Obj = Checker()
     Obj.checker()

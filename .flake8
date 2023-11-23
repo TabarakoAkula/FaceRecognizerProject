@@ -1,0 +1,7 @@
+[flake8]
+exclude =
+    __pycache__,
+    venv
+import-order-style=google
+inline-quotes = "
+ignore = T201, S608, E203
