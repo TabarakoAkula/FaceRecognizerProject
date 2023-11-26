@@ -38,7 +38,7 @@ class ModelMethods:
         clear_console()
         person_id = int(input("Enter person id: "))
         number_of_photos = int(input("Enter number of photos u required: "))
-        frame_time = 1
+        frame_time = 10
         show_window = (
             True if input("Show window? Y/N: ").lower() == "y" else False
         )
@@ -203,7 +203,6 @@ class TerminalMenu:
                             database.edit_user_info(
                                 user_id,
                                 user_name,
-                                change_name,
                             )
                             success(input_required=False)
                         else:

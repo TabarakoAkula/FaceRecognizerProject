@@ -1,7 +1,7 @@
 import shutil
 import sqlite3
 
-from config import db_name
+from config import db_name, table_name
 
 
 __all__ = ("DbWorker",)
@@ -22,18 +22,20 @@ class DbWorker(object):
 
     def get_all_users(self, names=False):
         if not names:
-            return self.returner("SELECT * FROM users")
-        return self.returner("SELECT name FROM users")
+            return self.returner(f"SELECT * FROM {table_name}")
+        return self.returner(f"SELECT name FROM {table_name}")
 
     def get_number_of_users(self):
-        return len(self.returner("SELECT id FROM users"))
+        return len(self.returner(f"SELECT id FROM {table_name}"))
 
     def get_one_user(self, user_id: str):
-        return self.returner(f"SELECT * FROM users WHERE id = {user_id}")
+        return self.returner(
+            f"SELECT * FROM {table_name} WHERE id = {user_id}",
+        )
 
     def add_user(self, username: str):
         return self.returner(
-            f"""INSERT INTO users (id, name) values(
+            f"""INSERT INTO {table_name} (id, name) values(
             {self.get_number_of_users() + 1},
              '{username}')""",
             commit=True,
@@ -45,7 +47,7 @@ class DbWorker(object):
         user_name,
     ):
         return self.returner(
-            f"UPDATE users SET "
+            f"UPDATE {table_name} SET "
             f"name = '{user_name}' "
             f"WHERE id = {user_id}",
             full_fetching=False,
@@ -58,7 +60,7 @@ class DbWorker(object):
         except FileNotFoundError:
             pass
         return self.returner(
-            f"DELETE FROM users " f"WHERE id = {user_id}",
+            f"DELETE FROM {table_name} " f"WHERE id = {user_id}",
             full_fetching=False,
             commit=True,
         )
