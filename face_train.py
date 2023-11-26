@@ -6,7 +6,7 @@ import numpy as np
 from PIL import Image
 
 
-__all__ = ()
+__all__ = ("FaceTrainer",)
 
 
 class FaceTrainer(object):
@@ -47,7 +47,7 @@ class FaceTrainer(object):
     def start_training(self, show_window: bool, frame_time: int):
         recognizer = cv2.face.LBPHFaceRecognizer_create()
         path = Path(os.path.abspath(__file__)).parent
-        data_path = path + r"/dataSet"
+        data_path = Path(str(path) + "/dataSet")
 
         images, labels = self.get_images_and_labels(
             data_path,
@@ -55,9 +55,9 @@ class FaceTrainer(object):
             frame_time,
         )
         recognizer.train(images, np.array(labels))
-        recognizer.save(path + r"/trainer/trainer.yml")
+        recognizer.save(str(path) + "/trainer/trainer.yml")
         cv2.destroyAllWindows()
-        return
+        return str(path) + "/trainer/trainer.yml"
 
 
 if __name__ == "__main__":

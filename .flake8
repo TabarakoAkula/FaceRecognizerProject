@@ -4,4 +4,4 @@ exclude =
     venv
 import-order-style=google
 inline-quotes = "
-ignore = T201, S608, E203
+ignore = T201, S608, E203, S605, S607, W503

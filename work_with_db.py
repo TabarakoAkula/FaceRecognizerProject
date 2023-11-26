@@ -1,20 +1,15 @@
 import shutil
+import sqlite3
 
-from config import db_name, host, password, user
-import psycopg2
+from config import db_name
 
 
-__all__ = ()
+__all__ = ("DbWorker",)
 
 
 class DbWorker(object):
     def __init__(self):
-        self.connection = psycopg2.connect(
-            host=host,
-            user=user,
-            password=password,
-            database=db_name,
-        )
+        self.connection = sqlite3.connect(db_name)
         self.cursor = self.connection.cursor()
 
     def close_connection(self):
@@ -22,12 +17,7 @@ class DbWorker(object):
         self.connection.close()
 
     def open_connection(self):
-        self.connection = psycopg2.connect(
-            host=host,
-            user=user,
-            password=password,
-            database=db_name,
-        )
+        self.connection = sqlite3.connect(db_name)
         self.cursor = self.connection.cursor()
 
     def get_all_users(self, names=False):
@@ -41,13 +31,11 @@ class DbWorker(object):
     def get_one_user(self, user_id: str):
         return self.returner(f"SELECT * FROM users WHERE id = {user_id}")
 
-    def add_user(self, username: str, profile_photo_address: str):
+    def add_user(self, username: str):
         return self.returner(
-            f"""INSERT INTO
-             users (id, name, profile_photo_address)
-             values({self.get_number_of_users() + 1},
-             '{username}', '{profile_photo_address}')""",
-            full_fetching=False,
+            f"""INSERT INTO users (id, name) values(
+            {self.get_number_of_users() + 1},
+             '{username}')""",
             commit=True,
         )
 
@@ -55,41 +43,22 @@ class DbWorker(object):
         self,
         user_id,
         user_name,
-        user_photo_address,
-        change_name,
-        change_path,
     ):
-        if change_name and change_path:
-            return self.returner(
-                f"UPDATE users SET "
-                f"name = '{user_name}', "
-                f"profile_photo_address = '{user_photo_address}' "
-                f"WHERE id = {user_id}",
-                full_fetching=False,
-                commit=True,
-            )
-        if change_name:
-            return self.returner(
-                f"UPDATE users SET "
-                f"name = '{user_name}' "
-                f"WHERE id = {user_id}",
-                full_fetching=False,
-                commit=True,
-            )
         return self.returner(
             f"UPDATE users SET "
-            f"profile_photo_address = '{user_photo_address}' "
+            f"name = '{user_name}' "
             f"WHERE id = {user_id}",
             full_fetching=False,
             commit=True,
         )
 
     def delete_user(self, user_id: int):
-        self.delete_user_photos(user_id)
+        try:
+            self.delete_user_photos(user_id)
+        except FileNotFoundError:
+            pass
         return self.returner(
-            f"UPDATE users SET name = ' ', "
-            f"profile_photo_address = ' ' "
-            f"WHERE id = {user_id}",
+            f"DELETE FROM users " f"WHERE id = {user_id}",
             full_fetching=False,
             commit=True,
         )
@@ -100,10 +69,16 @@ class DbWorker(object):
         shutil.rmtree(path_for_del)
         return
 
-    def clear_db(self, name_db: str):
+    def create_db(self, db_naming: str):
         self.returner(
-            f"""TRUNCATE {name_db}""",
-            full_fetching=False,
+            f"""CREATE TABLE {db_naming}
+             (id INT  PRIMARY KEY   NOT NULL,
+             name           TEXT    NOT NULL);""",
+        )
+
+    def clear_db(self, db_naming: str):
+        self.returner(
+            f"""DELETE FROM {db_naming};""",
             commit=True,
         )
         return

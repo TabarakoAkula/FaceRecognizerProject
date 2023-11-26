@@ -4,7 +4,7 @@ import cv2
 from work_with_db import DbWorker
 
 
-__all__ = ()
+__all__ = ("Checker",)
 
 
 class Checker(object):
@@ -17,9 +17,7 @@ class Checker(object):
         face_cascade = cv2.CascadeClassifier(
             cv2.data.haarcascades + "haarcascade_frontalface_default.xml",
         )
-        # Тип шрифта
         font = cv2.FONT_HERSHEY_SIMPLEX
-        # Список имен для id
         obj = DbWorker()
         names = obj.get_all_users(names=True)
         names.insert(0, ("Unknown",))
@@ -29,15 +27,11 @@ class Checker(object):
         cam = cv2.VideoCapture(0)
         cam.set(3, 640)  # set video width
         cam.set(4, 480)  # set video height
-        ret, img = cam.read()
         start = time.time()
-
-        print("\nSTART of RECORDING\n")
 
         while time.time() < start + 5:
             ret, img = cam.read()
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
             faces = face_cascade.detectMultiScale(
                 gray,
                 scaleFactor=1.2,
@@ -60,13 +54,6 @@ class Checker(object):
                     prediction_confidence = "  {0}%".format(
                         round(100 - prediction_confidence),
                     )
-                    print(
-                        "Name:",
-                        names[prediction_id][0],
-                        "Conf:",
-                        prediction_confidence,
-                        end="\r",
-                    )
                 else:
                     username_by_id = "Unknown"
                     self.confidence_dictionary["Unknown"].append(
@@ -75,7 +62,6 @@ class Checker(object):
                     prediction_confidence = "  {0}%".format(
                         round(100 - prediction_confidence),
                     )
-                    print("Unknown", end="\r")
 
                 cv2.putText(
                     img,
@@ -97,13 +83,9 @@ class Checker(object):
                 )
 
             cv2.imshow("camera", img)
-
             k = cv2.waitKey(10) & 0xFF  # 'ESC' для Выхода
             if k == 27:
                 break
-
-        print("\n\nEND of RECORDING\n")
-
         cam.release()
         cv2.destroyAllWindows()
         return self.confidence_dictionary
