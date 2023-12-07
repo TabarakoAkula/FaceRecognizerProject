@@ -10,6 +10,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 .idea
+my_database.db
 
 # C extensions
 *.so
