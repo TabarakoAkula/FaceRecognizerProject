@@ -1,3 +1,4 @@
+[![Flake8 + Black](https://github.com/TabarakoAkula/FaceRecognizerProject/actions/workflows/github-ci.yml/badge.svg)](https://github.com/TabarakoAkula/FaceRecognizerProject/actions/workflows/github-ci.yml)
 # **FaceRecognizerProject**
 
 ### Python version - 3.10 <br> BD - SQLite3
