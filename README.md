@@ -1,14 +1,17 @@
 [![Flake8 + Black](https://github.com/TabarakoAkula/FaceRecognizerProject/actions/workflows/github-ci.yml/badge.svg)](https://github.com/TabarakoAkula/FaceRecognizerProject/actions/workflows/github-ci.yml)
 # **FaceRecognizerProject**
 
-### Python version - 3.10 <br> BD - SQLite3
+<h2> Python version - 3.10 <br> BD - SQLite3</h2>
 
----
-## Клонирование проекта
+<details>
+<summary><h2>Установка</h2></summary>
+
+<h3>Клонирование проекта</h3>
+
 ```bash
 git clone https://github.com/TabarakoAkula/FaceRecognizerProject
 ```
-## Обновление pip:  
+<h3>Обновление pip:</h3>  
 + Windows:
 ```bash
 python -m pip install -U pip 
@@ -21,7 +24,8 @@ pip install -U pip
 
 ---
 
-## Создание виртуального окружения:  
+<h3>Создание виртуального окружения:  </h3>h3>
+
 + Windows:
 ```cmd
 python -m venv venv
@@ -36,7 +40,8 @@ source venv/bin/activate
 
 ---
 
-## Установка зависимостей
+<h3>Установка зависимостей</h3>
+
 + Для работы приложения:
 ```bash
 pip install -r requirements/prod.txt
@@ -50,18 +55,20 @@ pip install -r requirements/test.txt
 ---
 
 
-## Настройка .env файла:  
+<h3>Настройка .env файла:  </h3>
+
 Заполните данные в файле ``.env.template`` и после переименуйте файл в ``.env``
+</details>
 
----
-
-## Запуск  
+<details>
+<summary><h2>Первый запуск</h2></summary>
+    
 Запустите файл main.py без каких либо аргументов с помощью команды:
 ```bash
 python main.py
 ```
 
-## Настройка
+<h3>Настройка</h3>
 +   Первым делом вам необходимо создать файл базы данных и свою первую таблицу,
     для этого перейдите в ``Model --> Create table`` и введите название для
     таблицы c пользователями. После чего откройте ваш ``.env`` файл и запишите в переменную
@@ -86,8 +93,11 @@ python main.py
   +   Теперь можете запускать пункт ``Checker``(``Checker``, ``Dataset --> Checker``).  
       В течение 5 секунд программа будет собирать данные о лицах с камеры и после чего выведет в консоль 
       предполагаемое имя пользователя и процент совпадения с фотографиями из датасета.
+</details>
+<details>
+<summary><h2>Тесты</h2></summary>
 
-## Проверка линтерами
+<h3>Проверка линтерами</h3>
 Для проекта используются 2 линтера: ``flake8`` и ``black``. Чтобы проверить чистоту своего кода выполните следующее:
 + Установите зависимости для теста:
   ```bash
@@ -102,3 +112,4 @@ python main.py
     black --check --verbose --diff --skip-string-normalization --line-length 79 --color .
     ```
 Теперь вы можете просмотреть где можно улучшить свой код :) 
+</details>
