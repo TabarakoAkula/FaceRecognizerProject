@@ -29,7 +29,7 @@ class UiMainwindow(object):
         self.pushButton_3.setObjectName("pushButton_3")
 
         self.pushButton.clicked.connect(lambda x: self.start_checker())
-        self.pushButton_2.clicked.connect(lambda x: self.exit_app())
+        self.pushButton_2.clicked.connect(lambda x: self.exit_code())
         self.pushButton_3.clicked.connect(lambda x: self.redirect())
 
         main_window.setCentralWidget(self.centralwidget)
@@ -48,14 +48,14 @@ class UiMainwindow(object):
     def start_checker(self):
         QtCore.QCoreApplication.quit()
 
-    def exit_app(self):
-        exit()
-
     def redirect(self):
         webbrowser.open(
             "https://github.com/TabarakoAkula/FaceRecognizerProject",
             new=2,
         )
+
+    def exit_code(self):
+        exit()
 
 
 def welcome_app_starter():
@@ -68,3 +68,7 @@ def welcome_app_starter():
     main_window.show()
     app.exec_()
     return
+
+
+if __name__ == "__main__":
+    welcome_app_starter()

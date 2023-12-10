@@ -16,7 +16,6 @@ __all__ = ()
 
 database = DbWorker()
 init(autoreset=True)
-start_checker = False
 
 
 def clear_console():
@@ -136,31 +135,34 @@ class ModelMethods:
             )
             input("\nPress enter....")
             return
-        print(Style.BRIGHT + Fore.BLUE + "Checker is activated")
+        print(Style.BRIGHT + Fore.BLUE + "Checker", "is activated")
         checker_object = Checker()
-        confidence_dictionary_clear = checker_object.init_checker()
-        maximum_match = max(
-            self.checker_analyzer(confidence_dictionary_clear).items(),
-            key=lambda x: x[1],
-        )
-        predicted_user = maximum_match[0]
-        data = {
-            "predicted_user": predicted_user,
-            "confidence": maximum_match[1],
-        }
-        app_info.info_app_starter(data)
+        while True:
+            confidence_dictionary_clear = checker_object.init_checker()
+            maximum_match = max(
+                self.checker_analyzer(confidence_dictionary_clear).items(),
+                key=lambda x: x[1],
+            )
+            predicted_user = maximum_match[0]
+            data = {
+                "predicted_user": predicted_user,
+                "confidence": maximum_match[1],
+            }
+            app_info.info_app_starter(data)
 
-        print(
-            "predicted user:" + Style.BRIGHT + Fore.MAGENTA + maximum_match[0],
-        )
-        print(
-            "confidence:"
-            + Style.BRIGHT
-            + Fore.MAGENTA
-            + str(maximum_match[1]),
-        )
-        input("\nPress enter....")
-        return
+            print(
+                "predicted user:"
+                + Style.BRIGHT
+                + Fore.MAGENTA
+                + maximum_match[0],
+            )
+            print(
+                "confidence:"
+                + Style.BRIGHT
+                + Fore.MAGENTA
+                + str(maximum_match[1])
+                + "\n",
+            )
 
 
 class TerminalMenu:

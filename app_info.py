@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import sys
 import webbrowser
 
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -18,6 +19,9 @@ class UiMainwindow(object):
         font.setPointSize(16)
         self.label.setFont(font)
         self.label.setObjectName("label")
+        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton.setGeometry(QtCore.QRect(120, 180, 331, 41))
+        self.pushButton.setObjectName("pushButton")
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_2.setGeometry(QtCore.QRect(10, 180, 101, 41))
         self.pushButton_2.setObjectName("pushButton_2")
@@ -54,8 +58,8 @@ class UiMainwindow(object):
         self.label_3.setText(
             self.label_3.text() + " " + str(round(data["confidence"], 2)),
         )
-
-        self.pushButton_2.clicked.connect(lambda x: self.exit_checker())
+        self.pushButton.clicked.connect(lambda x: self.checker_starter())
+        self.pushButton_2.clicked.connect(lambda x: self.exit_code())
         self.pushButton_3.clicked.connect(lambda x: self.redirect())
 
         QtCore.QMetaObject.connectSlotsByName(main_window)
@@ -64,6 +68,7 @@ class UiMainwindow(object):
         _translate = QtCore.QCoreApplication.translate
         main_window.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.label.setText(_translate("MainWindow", "Face Recognizer"))
+        self.pushButton.setText(_translate("MainWindow", "Identify me"))
         self.pushButton_2.setText(_translate("MainWindow", "Exit"))
         self.pushButton_3.setText(_translate("MainWindow", "Help"))
         self.label_2.setText(
@@ -72,8 +77,11 @@ class UiMainwindow(object):
         self.label_3.setText(_translate("MainWindow", "Confidence:"))
         self.label_4.setText(_translate("MainWindow", "Status:"))
 
-    def exit_checker(self):
+    def checker_starter(self):
         QtCore.QCoreApplication.quit()
+
+    def exit_code(self):
+        exit()
 
     def redirect(self):
         webbrowser.open(
@@ -83,8 +91,6 @@ class UiMainwindow(object):
 
 
 def info_app_starter(data):
-    import sys
-
     app = QtWidgets.QApplication(sys.argv)
     main_window = QtWidgets.QMainWindow()
     ui = UiMainwindow()
