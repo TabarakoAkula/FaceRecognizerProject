@@ -1,6 +1,7 @@
 import time
 
 import app_welcome
+from colorama import Fore, Style
 import cv2
 from work_with_db import DbWorker
 
@@ -18,21 +19,21 @@ class Checker(object):
             self.recognizer.read("trainer/trainer.yml")
         except cv2.error:
             return {"error": "no data"}
-        print("Loaded trainer.yml")
+        print("Loaded", Style.BRIGHT + Fore.BLUE + "trainer.yml")
         self.face_cascade = cv2.CascadeClassifier(
             cv2.data.haarcascades + "haarcascade_frontalface_default.xml",
         )
-        print("Loaded haarcascade_frontalface")
+        print("Loaded", Style.BRIGHT + Fore.BLUE + "haarcascade_frontalface")
         self.font = cv2.FONT_HERSHEY_SIMPLEX
         self.obj = DbWorker()
         self.names = self.obj.get_all_users(names=True)
         self.names.insert(0, ("Unknown",))
         for i in self.names:
             self.confidence_dictionary[i[0]] = []
-        self.cam = cv2.VideoCapture(0)
-        self.cam.set(3, 640)  # set video width
-        self.cam.set(4, 480)  # set video height
-        self.ret, self.img = self.cam.read()
+        self.cam = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+        self.cam.set(3, 640)
+        self.cam.set(4, 480)
+        print(Style.BRIGHT + Fore.BLUE + "Camera is ready")
         return self.runner()
 
     def runner(self):
