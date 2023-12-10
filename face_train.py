@@ -12,18 +12,24 @@ __all__ = ("FaceTrainer",)
 class FaceTrainer(object):
     @staticmethod
     def get_images_and_labels(
-        datapath: str,
+        datapath,
         enable_window: bool,
         window_time: int,
     ):
         face_cascade = cv2.CascadeClassifier(
             cv2.data.haarcascades + "haarcascade_frontalface_default.xml",
         )
-        image_path1 = [Path(datapath / f) for f in os.listdir(datapath)]
+        image_path1 = [
+            Path(datapath / f)
+            for f in os.listdir(str(datapath))
+            if ".gitkeep" not in f
+        ]
+        if not image_path1:
+            return "Error", "no data in dataSet/"
         image_paths = []
         for i in image_path1:
             for j in os.listdir(i):
-                image_paths.append(os.path.join(datapath, i, j))
+                image_paths.append(os.path.join(str(datapath), i, j))
         images = []
         labels = []
         for image_path in image_paths:
@@ -54,6 +60,8 @@ class FaceTrainer(object):
             show_window,
             frame_time,
         )
+        if images == "Error":
+            return "Error"
         recognizer.train(images, np.array(labels))
         recognizer.save(str(path) + "/trainer/trainer.yml")
         cv2.destroyAllWindows()
