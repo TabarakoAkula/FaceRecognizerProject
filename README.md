@@ -11,28 +11,32 @@
 ```bash
 git clone https://github.com/TabarakoAkula/FaceRecognizerProject
 ```
-<h3>Обновление pip:</h3>  
-+ Windows:
+<h3>Обновление pip:</h3>
+
++ Windows:  
 ```bash
 python -m pip install -U pip 
 ```
 
 + Linux:
+  
 ```bash
 pip install -U pip
 ```
 
 ---
 
-<h3>Создание виртуального окружения:  </h3>h3>
+<h3>Создание виртуального окружения:  </h3>
 
 + Windows:
+  
 ```cmd
 python -m venv venv
 venv\Scripts\activate.bat 
 ```
 
-+ Linux: 
++ Linux:
+  
 ```bash
 python3 -m venv venv
 source venv/bin/activate 
@@ -69,6 +73,7 @@ python main.py
 ```
 
 <h3>Настройка</h3>
+
 +   Первым делом вам необходимо создать файл базы данных и свою первую таблицу,
     для этого перейдите в ``Model --> Create table`` и введите название для
     таблицы c пользователями. После чего откройте ваш ``.env`` файл и запишите в переменную
@@ -98,6 +103,7 @@ python main.py
 <summary><h2>Тесты</h2></summary>
 
 <h3>Проверка линтерами</h3>
+
 Для проекта используются 2 линтера: ``flake8`` и ``black``. Чтобы проверить чистоту своего кода выполните следующее:
 + Установите зависимости для теста:
   ```bash
